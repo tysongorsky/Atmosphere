@@ -1,6 +1,6 @@
-# Neighbourhood Glow
+# Atmosphere
 
-Neighbourhood Glow is a complete Progressive Web App and lighting-control server for Neighbourhood Church in Calgary, Alberta. The project serves an audience-facing light display, secure admin controls, and live DMX lighting state updates for community event experiences.
+Atmosphere is a complete Progressive Web App and lighting-control server for Neighbourhood Church in Calgary, Alberta. The project serves an audience-facing light display, secure admin control, and live scene management for immersive worship and event experiences.
 
 ## Features
 
@@ -86,4 +86,4 @@ npm run loadtest
 
 ## License
 
-This project is created for Neighbourhood Church and licensed perosnal
+This project is created for Neighbourhood Church and licensed personal

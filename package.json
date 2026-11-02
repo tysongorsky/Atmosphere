@@ -1,7 +1,7 @@
 {
-  "name": "neighbourhood-glow",
+  "name": "atmosphere",
   "version": "1.0.0",
-  "description": "Neighbourhood Glow is a Node.js PWA and lighting control server for audience lighting experiences.",
+  "description": "Atmosphere is a Node.js PWA and lighting control server for audience lighting experiences.",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
