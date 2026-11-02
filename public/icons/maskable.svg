@@ -1,12 +1,20 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Neighbourhood Glow icon">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Atmosphere logo">
   <defs>
-    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="50%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#fb7185"/>
+    <linearGradient id="ring" x1="60" y1="130" x2="450" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff1493"/>
+      <stop offset=".25" stop-color="#8b2cff"/>
+      <stop offset=".5" stop-color="#ff9b45"/>
+      <stop offset=".75" stop-color="#00cfff"/>
+      <stop offset="1" stop-color="#ff1493"/>
+    </linearGradient>
+    <linearGradient id="letter" x1="170" y1="115" x2="340" y2="395" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff66bd"/>
+      <stop offset=".3" stop-color="#ff1493"/>
+      <stop offset=".65" stop-color="#8b2cff"/>
+      <stop offset="1" stop-color="#00cfff"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="28" fill="#0b1220"/>
-  <circle cx="64" cy="64" r="34" fill="url(#g)"/>
-  <circle cx="64" cy="64" r="18" fill="#fff8e7" opacity="0.9"/>
+  <rect width="512" height="512" fill="#08070c"/>
+  <circle cx="256" cy="256" r="154" fill="none" stroke="url(#ring)" stroke-width="12"/>
+  <path d="M153 365 242 145h28l89 220h-46l-19-48h-76l-19 48h-46Zm80-85h46l-14-38-9-27-9 27-14 38Z" fill="url(#letter)"/>
 </svg>

@@ -3,24 +3,30 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#0f172a" />
-    <title>Neighbourhood Glow</title>
+    <meta name="theme-color" content="#08070c" />
+    <title>Atmosphere</title>
     <link rel="manifest" href="/manifest.webmanifest" />
     <link rel="stylesheet" href="/audience.css" />
+    <link rel="stylesheet" href="/logo.css" />
   </head>
   <body class="audience-page">
     <main class="audience-shell" aria-live="polite">
       <div id="disconnectedOverlay" class="connection-overlay hidden" role="alert">
         <div>
           <strong>Disconnected</strong>
-          <p>Reconnect in progress. Please wait while the display reconnects to Neighbourhood Glow.</p>
+          <p>Reconnect in progress. Please wait while the display reconnects to Atmosphere.</p>
         </div>
       </div>
 
       <header class="audience-header">
         <div class="title-wrap">
-          <p class="eyebrow">Neighbourhood Church</p>
-          <h1>Neighbourhood Glow</h1>
+          <div class="atmosphere-logo" aria-label="Atmosphere logo">
+            <div class="atmosphere-symbol" aria-hidden="true">
+              <span class="atmosphere-ring"></span>
+              <span class="atmosphere-letter">A</span>
+            </div>
+            <span class="atmosphere-wordmark">Atmosphere</span>
+          </div>
         </div>
         <div class="status-pill" id="connectionStatus">Connecting…</div>
       </header>
@@ -42,7 +48,7 @@
 
       <section class="announcement-block">
         <p class="announcement-label">Audience announcement</p>
-        <p id="announcementText">Welcome to Neighbourhood Glow.</p>
+        <p id="announcementText">Welcome to Atmosphere.</p>
       </section>
 
       <div class="video-frame hidden" id="videoFrame">

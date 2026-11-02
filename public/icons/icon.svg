@@ -1,11 +1,20 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const { parseArtDmxPacket, parseSacnPacket } = require('../server/lighting');
-
-test('Malformed packets are rejected safely', () => {
-  const artnet = parseArtDmxPacket(Buffer.from('bad-artnet'), { source: '127.0.0.1' });
-  const sacn = parseSacnPacket(Buffer.from('bad-sacn'), { source: '127.0.0.1' });
-
-  assert.equal(artnet.ok, false);
-  assert.equal(sacn.ok, false);
-});
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Atmosphere logo">
+  <defs>
+    <linearGradient id="ring" x1="60" y1="130" x2="450" y2="380" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff1493"/>
+      <stop offset=".25" stop-color="#8b2cff"/>
+      <stop offset=".5" stop-color="#ff9b45"/>
+      <stop offset=".75" stop-color="#00cfff"/>
+      <stop offset="1" stop-color="#ff1493"/>
+    </linearGradient>
+    <linearGradient id="letter" x1="170" y1="115" x2="340" y2="395" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#ff66bd"/>
+      <stop offset=".3" stop-color="#ff1493"/>
+      <stop offset=".65" stop-color="#8b2cff"/>
+      <stop offset="1" stop-color="#00cfff"/>
+    </linearGradient>
+  </defs>
+  <rect width="512" height="512" rx="64" fill="#08070c"/>
+  <circle cx="256" cy="256" r="174" fill="none" stroke="url(#ring)" stroke-width="10"/>
+  <path d="M153 365 242 145h28l89 220h-46l-19-48h-76l-19 48h-46Zm80-85h46l-14-38-9-27-9 27-14 38Z" fill="url(#letter)"/>
+</svg>
