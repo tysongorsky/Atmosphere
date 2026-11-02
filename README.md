@@ -1,6 +1,6 @@
 # Atmosphere
 
-Atmosphere is a complete Progressive Web App and lighting-control server for Neighbourhood Church in Calgary, Alberta. The project serves an audience-facing light display, secure admin control, and live scene management for immersive worship and event experiences.
+Atmosphere is a complete Progressive Web App and lighting-control server for a local church in Calgary, Alberta. The project serves an audience-facing light display, secure admin control, and live scene management for immersive worship and event experiences.
 
 ## Features
 
@@ -86,4 +86,4 @@ npm run loadtest
 
 ## License
 
-This project is created for Neighbourhood Church and licensed personal
+This project is created for a local church and is licensed personal
