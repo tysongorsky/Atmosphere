@@ -116,4 +116,4 @@ npm run loadtest
 
 ## License
 
-This project is licensed personal
+This project is licensed personal only reach out to tyson@neighbourhoodchurch.ca for rights to use this software
