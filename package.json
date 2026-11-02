@@ -4,11 +4,12 @@
   "description": "Atmosphere is a Node.js PWA and lighting control server for audience lighting experiences.",
   "main": "server/index.js",
   "scripts": {
-    "start": "node server/index.js",
-    "dev": "node --watch server/index.js",
+    "start": "node server/start.js",
+    "dev": "node --watch server/start.js",
     "test": "node --test",
     "simulate:artnet": "node scripts/artnet-simulator.js",
     "simulate:sacn": "node scripts/sacn-simulator.js",
+    "simulate:espnet": "node scripts/espnet-simulator.js",
     "loadtest": "node scripts/ws-load-test.js"
   },
   "engines": {

@@ -34,6 +34,7 @@ The server uses port 3000 by default. To run in development mode with file watch
 - Admin dashboard for scene and lighting control
 - Art-Net DMX listener on UDP port 6454
 - sACN/E1.31 DMX listener on UDP port 5568
+- ESP-NET DMX listener on UDP port 3333
 - WebSocket live updates between audience and admin views
 - PWA support with manifest and service worker
 - HTML, CSS, and vanilla JavaScript front end
@@ -88,8 +89,13 @@ Key settings include:
 - `port`: HTTP port for the app
 - `artnet.listenPort`: UDP port for Art-Net input
 - `sacn.listenPort`: UDP port for sACN input
+- `espnet.listenPort`: UDP port for ESP-NET input (default 3333)
+- `espnet.universe`: ESP-NET universe to accept
+- `espnet.opcode`: ESP-NET DMX opcode (default 0)
 - `lighting.defaultChannels`: default DMX values for the live scene
 - `videos`: video cue list
+
+ESP-NET can be disabled with `"enabled": false` under `espnet`. The listener accepts `ES`-prefixed frames with a one-byte opcode, little-endian 16-bit universe and payload length, and 1–512 DMX channel bytes. To send a sample frame, run `npm run simulate:espnet` (or set `ESPNET_HOST`, `ESPNET_PORT`, and `ESPNET_UNIVERSE`).
 
 ## Testing
 
@@ -104,6 +110,7 @@ Additional scripts:
 ```bash
 npm run simulate:artnet
 npm run simulate:sacn
+npm run simulate:espnet
 npm run loadtest
 ```
 
@@ -111,7 +118,7 @@ npm run loadtest
 
 - If the web app does not load, confirm the Node process is running and the configured port is correct.
 - If the admin dashboard cannot connect, check the WebSocket connection and browser console.
-- If Art-Net or sACN input is missing, confirm UDP ports 6454 and 5568 are open.
+- If Art-Net, sACN, or ESP-NET input is missing, confirm the configured UDP ports are open (6454, 5568, and 3333 by default).
 - If the audience display is not updating, inspect the server logs and WebSocket state.
 
 ## License

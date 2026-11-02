@@ -19,6 +19,13 @@
     "sourceName": "NeighbourhoodGlow",
     "sourceTimeoutMs": 2500
   },
+  "espnet": {
+    "enabled": true,
+    "listenPort": 3333,
+    "receiveHost": "0.0.0.0",
+    "universe": 1,
+    "opcode": 0
+  },
   "lighting": {
     "defaultEffect": "solid",
     "defaultChannels": [255, 152, 96, 180, 0, 1],
