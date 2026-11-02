@@ -86,4 +86,4 @@ npm run loadtest
 
 ## License
 
-This project is created for Neighbourhood Church and is intended for local event or campus installation usage.
+This project is created for Neighbourhood Church and licensed perosnal
