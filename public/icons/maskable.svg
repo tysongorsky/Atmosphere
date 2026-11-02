@@ -1,12 +1,24 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Neighbourhood Glow icon">
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="g" x1="0" x2="1" y1="0" y2="1">
-      <stop offset="0%" stop-color="#fbbf24"/>
-      <stop offset="50%" stop-color="#f59e0b"/>
-      <stop offset="100%" stop-color="#fb7185"/>
+    <conicGradient id="ring" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 256) rotate(210)">
+      <stop offset="0" stop-color="#FF1493"/>
+      <stop offset="0.2" stop-color="#8B2CFF"/>
+      <stop offset="0.4" stop-color="#FF9B45"/>
+      <stop offset="0.6" stop-color="#FF1493"/>
+      <stop offset="0.8" stop-color="#00CFFF"/>
+      <stop offset="1" stop-color="#8B2CFF"/>
+    </conicGradient>
+    <linearGradient id="letterFill" x1="140" y1="120" x2="366" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF66BD"/>
+      <stop offset="0.25" stop-color="#FF1493"/>
+      <stop offset="0.52" stop-color="#8B2CFF"/>
+      <stop offset="0.75" stop-color="#6655FF"/>
+      <stop offset="1" stop-color="#00CFFF"/>
     </linearGradient>
   </defs>
-  <rect width="128" height="128" rx="28" fill="#0b1220"/>
-  <circle cx="64" cy="64" r="34" fill="url(#g)"/>
-  <circle cx="64" cy="64" r="18" fill="#fff8e7" opacity="0.9"/>
+
+  <rect width="512" height="512" rx="64" fill="#08070C"/>
+  <circle cx="256" cy="256" r="154" fill="url(#ring)"/>
+  <circle cx="256" cy="256" r="128" fill="#08070C" fill-opacity="0.72"/>
+  <path d="M153 346L242 126H270L359 346H313L294 298H218L199 346H153ZM228 264H284L267 217L254 178L241 217L228 264Z" fill="url(#letterFill)"/>
 </svg>

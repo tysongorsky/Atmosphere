@@ -1,11 +1,35 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const { parseArtDmxPacket, parseSacnPacket } = require('../server/lighting');
+<svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bgGlow" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 196) rotate(90) scale(260)">
+      <stop stop-color="#8B2CFF" stop-opacity="0.35"/>
+      <stop offset="0.45" stop-color="#8B2CFF" stop-opacity="0.1"/>
+      <stop offset="1" stop-color="#08070C" stop-opacity="0"/>
+    </radialGradient>
+    <conicGradient id="ring" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(256 256) rotate(210)">
+      <stop offset="0" stop-color="#FF1493"/>
+      <stop offset="0.2" stop-color="#8B2CFF"/>
+      <stop offset="0.4" stop-color="#FF9B45"/>
+      <stop offset="0.6" stop-color="#FF1493"/>
+      <stop offset="0.8" stop-color="#00CFFF"/>
+      <stop offset="1" stop-color="#8B2CFF"/>
+    </conicGradient>
+    <linearGradient id="letterFill" x1="140" y1="120" x2="366" y2="420" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF66BD"/>
+      <stop offset="0.25" stop-color="#FF1493"/>
+      <stop offset="0.52" stop-color="#8B2CFF"/>
+      <stop offset="0.75" stop-color="#6655FF"/>
+      <stop offset="1" stop-color="#00CFFF"/>
+    </linearGradient>
+  </defs>
 
-test('Malformed packets are rejected safely', () => {
-  const artnet = parseArtDmxPacket(Buffer.from('bad-artnet'), { source: '127.0.0.1' });
-  const sacn = parseSacnPacket(Buffer.from('bad-sacn'), { source: '127.0.0.1' });
+  <rect width="512" height="512" rx="64" fill="#08070C"/>
+  <circle cx="256" cy="196" r="200" fill="url(#bgGlow)"/>
 
-  assert.equal(artnet.ok, false);
-  assert.equal(sacn.ok, false);
-});
+  <circle cx="256" cy="256" r="154" fill="url(#ring)"/>
+  <circle cx="256" cy="256" r="128" fill="#08070C" fill-opacity="0.72"/>
+
+  <path d="M153 346L242 126H270L359 346H313L294 298H218L199 346H153ZM228 264H284L267 217L254 178L241 217L228 264Z" fill="url(#letterFill)"/>
+
+  <circle cx="256" cy="256" r="160" stroke="rgba(255,255,255,0.12)" stroke-width="2"/>
+  <circle cx="256" cy="256" r="182" stroke="rgba(255,255,255,0.08)" stroke-width="2"/>
+</svg>
