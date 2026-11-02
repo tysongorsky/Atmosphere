@@ -1,0 +1,19 @@
+{
+  "port": 3000,
+  "artnet": {
+    "enabled": true,
+    "universe": 1,
+    "ip": "127.0.0.1",
+    "port": 6454
+  },
+  "sacn": {
+    "enabled": true,
+    "universe": 1,
+    "sourceName": "NeighbourhoodGlow",
+    "priority": 100
+  },
+  "lighting": {
+    "defaultScene": "festival",
+    "maxChannels": 512
+  }
+}

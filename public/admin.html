@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel | Neighbourhood Glow</title>
+    <link rel="stylesheet" href="/admin.css" />
+  </head>
+  <body class="admin-page">
+    <main class="admin-shell">
+      <header>
+        <p class="eyebrow">Administration</p>
+        <h1>Neighbourhood Glow</h1>
+      </header>
+
+      <section class="panel">
+        <label for="sceneSelect">Scene</label>
+        <select id="sceneSelect">
+          <option value="festival">Festival</option>
+          <option value="sunset">Sunset</option>
+          <option value="pulse">Pulse</option>
+          <option value="emerald">Emerald</option>
+        </select>
+
+        <label for="intensity">Intensity</label>
+        <input id="intensity" type="range" min="0" max="255" value="180" />
+
+        <button id="sendScene">Send lighting scene</button>
+      </section>
+
+      <section class="status-panel">
+        <p>Server status</p>
+        <pre id="statusOutput">Checking...</pre>
+      </section>
+    </main>
+
+    <script src="/admin.js"></script>
+  </body>
+</html>

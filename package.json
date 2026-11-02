@@ -1,0 +1,15 @@
+{
+  "name": "neighbourhood-glow",
+  "version": "1.0.0",
+  "description": "A neighborhood lighting control dashboard for Art-Net and sACN fixtures.",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "express": "^4.19.2",
+    "ws": "^8.17.0"
+  }
+}

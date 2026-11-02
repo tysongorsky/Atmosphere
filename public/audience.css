@@ -1,0 +1,108 @@
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: Arial, Helvetica, sans-serif;
+  background: radial-gradient(circle at center, #182335, #090d14 68%);
+  color: #edf6ff;
+}
+
+.audience-page {
+  display: grid;
+  place-items: center;
+}
+
+.audience-shell {
+  width: min(90vw, 960px);
+  text-align: center;
+  padding: 2rem 1rem 3rem;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18rem;
+  color: #9ec8ff;
+  margin-bottom: 0.5rem;
+}
+
+h1, h2 {
+  margin: 0;
+}
+
+.hero-panel {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 420px;
+  margin: 2rem 0;
+  border-radius: 32px;
+  background: rgba(13, 22, 37, 0.75);
+  overflow: hidden;
+  border: 1px solid rgba(162, 204, 255, 0.2);
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(24px);
+  opacity: 0.9;
+  animation: drift 12s ease-in-out infinite alternate;
+}
+
+.orb-one {
+  width: 260px;
+  height: 260px;
+  background: rgba(67, 204, 255, 0.55);
+  left: 18%;
+}
+
+.orb-two {
+  width: 320px;
+  height: 320px;
+  background: rgba(212, 122, 255, 0.48);
+  right: 16%;
+  animation-delay: 1.5s;
+}
+
+.orb-three {
+  width: 220px;
+  height: 220px;
+  background: rgba(82, 255, 180, 0.5);
+  bottom: 12%;
+  animation-delay: 3s;
+}
+
+.cta-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.scene-button {
+  border: none;
+  padding: 0.9rem 1.4rem;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #60c9ff, #6a79ff);
+  color: white;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.status-block {
+  margin-top: 1.5rem;
+}
+
+.status-label {
+  color: #9db9d9;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes drift {
+  from {
+    transform: translate(-18px, -12px) scale(0.98);
+  }
+  to {
+    transform: translate(18px, 12px) scale(1.12);
+  }
+}
