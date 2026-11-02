@@ -1,6 +1,32 @@
 # Atmosphere
 
-Atmosphere is a complete Progressive Web App and lighting-control server for immersive audience experiences. The project serves an audience-facing light display, secure admin control, and live scene management for creative event environments.
+Atmosphere is a complete Progressive Web App and lighting-control server for immersive audience experiences. It provides an audience-facing light display, admin controls, and live scene updates.
+
+## Quick start
+
+### Requirements
+
+- Node.js 20 or newer (npm is included with Node.js)
+
+### Install and run
+
+```bash
+# Install dependencies
+npm install
+
+# Create your local configuration file
+cp config.example.json config.json
+
+# Start the server
+npm start
+```
+
+Then open:
+
+- Audience page: http://localhost:3000/
+- Admin dashboard: http://localhost:3000/admin.html
+
+The server uses port 3000 by default. To run in development mode with file watching, use `npm run dev` instead of `npm start`.
 
 ## Features
 
@@ -51,7 +77,11 @@ npm run dev
 
 ## Configuration
 
-The app uses a local config file based on `config.example.json`.
+The app uses a local config file based on `config.example.json`. Copy it to `config.json` before starting the server:
+
+```bash
+cp config.example.json config.json
+```
 
 Key settings include:
 
