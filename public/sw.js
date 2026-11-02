@@ -1,9 +1,18 @@
-self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open('neighbourhood-glow').then((cache) => cache.addAll(['/']));
-});
-
-self.addEventListener('fetch', (event) => {
-  event.respondWith(
-    caches.match(event.request).then((response) => response || fetch(event.request))
-  );
-});
+{
+  "name": "Neighbourhood Glow",
+  "short_name": "Glow",
+  "description": "Audience lighting and church event display for Neighbourhood Church.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050b15",
+  "theme_color": "#0f172a",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

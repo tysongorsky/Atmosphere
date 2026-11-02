@@ -1,22 +1,29 @@
-const WebSocket = require('ws');
+const dgram = require('node:dgram');
+const { createSacnPacket } = require('../server/lighting');
 
-const socket = new WebSocket('ws://localhost:3000');
+const host = process.env.SACN_HOST || '127.0.0.1';
+const port = Number(process.env.SACN_PORT || 5568);
+const universe = Number(process.env.SACN_UNIVERSE || 1);
+const priority = Number(process.env.SACN_PRIORITY || 100); 
+const sequence = Number(process.env.SACN_SEQUENCE || 1);
+const channels = [
+  40,
+  100,
+  220,
+  160,
+  128,
+  2,
+];
 
-socket.addEventListener('open', () => {
-  console.log('WebSocket connected');
+const packet = createSacnPacket({ universe, priority, sequence, sourceName: 'DemoConsole', channels });
+const socket = dgram.createSocket('udp4');
 
-  for (let i = 0; i < 10; i += 1) {
-    socket.send(JSON.stringify({
-      scene: 'pulse',
-      channels: [120 + i, 140 + i, 165 + i, 200 + i],
-    }));
+socket.send(packet, port, host, (error) => {
+  if (error) {
+    console.error('sACN simulator failed:', error.message || error);
+    process.exitCode = 1;
+  } else {
+    console.log(`sACN packet sent to ${host}:${port} on universe ${universe}`);
   }
-});
-
-socket.addEventListener('message', (event) => {
-  console.log('Message received:', event.data.toString());
-});
-
-socket.addEventListener('error', (error) => {
-  console.error('WebSocket error:', error.message || error);
+  socket.close();
 });

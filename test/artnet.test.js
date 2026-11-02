@@ -1,23 +1,46 @@
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const { ArtNetController } = require('../server/artnet');
+const WebSocket = require('ws');
 
-test('ArtNetController connects and reports status', () => {
-  const controller = new ArtNetController({ universe: 7, ip: '10.0.0.1' });
+const target = process.env.WS_URL || 'ws://localhost:3000';
+const totalClients = Number(process.env.WS_CLIENTS || process.argv[2] || 1000);
 
-  assert.equal(controller.isEnabled(), true);
-  assert.deepEqual(controller.status(), {
-    enabled: true,
-    connected: false,
-    universe: 7,
-    ip: '10.0.0.1',
-    port: 6454,
+const sockets = [];
+let connected = 0;
+let finished = false;
+
+function finish() {
+  if (finished) return;
+  finished = true;
+  const elapsed = ((performance.now && performance.now()) || Date.now()) - start;
+  console.log(`Connected ${connected}/${totalClients} clients in ${elapsed.toFixed(0)} ms.`);
+  process.exit(0);
+}
+
+const start = Date.now();
+
+for (let index = 0; index < totalClients; index += 1) {
+  const socket = new WebSocket(target);
+  sockets.push(socket);
+
+  socket.addEventListener('open', () => {
+    connected += 1;
+    socket.send(JSON.stringify({ type: 'hello', client: `client-${index}` }));
+    if (connected >= totalClients) {
+      finish();
+    }
   });
 
-  assert.deepEqual(controller.sendFrame([255, 128, 32]), {
-    sent: true,
-    protocol: 'Art-Net',
-    universe: 7,
-    channelCount: 3,
+  socket.addEventListener('error', () => {
+    console.warn(`Client ${index} failed to connect.`);
   });
-});
+
+  socket.addEventListener('close', () => {
+    connected = Math.max(0, connected - 1);
+  });
+}
+
+setTimeout(() => {
+  if (connected < totalClients) {
+    console.warn(`Only ${connected}/${totalClients} clients connected before timeout.`);
+  }
+  finish();
+}, 10000);

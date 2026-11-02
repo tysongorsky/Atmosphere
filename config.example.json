@@ -1,19 +1,34 @@
 {
   "port": 3000,
+  "adminPinEnv": "ADMIN_PIN",
+  "adminPin": "8585",
   "artnet": {
     "enabled": true,
+    "listenPort": 6454,
+    "receiveHost": "0.0.0.0",
     "universe": 1,
-    "ip": "127.0.0.1",
-    "port": 6454
+    "priority": 50,
+    "acceptFrom": ["127.0.0.1", "192.168.0.0/16"]
   },
   "sacn": {
     "enabled": true,
+    "listenPort": 5568,
+    "receiveHost": "0.0.0.0",
     "universe": 1,
+    "priority": 100,
     "sourceName": "NeighbourhoodGlow",
-    "priority": 100
+    "sourceTimeoutMs": 2500
   },
   "lighting": {
-    "defaultScene": "festival",
-    "maxChannels": 512
-  }
+    "defaultEffect": "solid",
+    "defaultChannels": [255, 152, 96, 180, 0, 1],
+    "maxChannels": 512,
+    "blackoutChannels": [0, 0, 0, 0, 0, 0]
+  },
+  "videos": [
+    { "id": "welcome", "label": "Welcome", "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" },
+    { "id": "celebration", "label": "Celebration", "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.webm" },
+    { "id": "soft-light", "label": "Soft Light", "url": "https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" }
+  ],
+  "announcement": "Welcome to Neighbourhood Glow."
 }

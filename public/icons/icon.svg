@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
-  <rect width="128" height="128" rx="24" fill="#0d1320"/>
-  <circle cx="64" cy="64" r="28" fill="#60c9ff"/>
-  <circle cx="64" cy="64" r="18" fill="#9ee7ff"/>
-  <path d="M26 38 L64 16 L102 38 L64 112 Z" fill="#7a6dff" opacity="0.85"/>
-</svg>
+const test = require('node:test');
+const assert = require('node:assert/strict');
+const { parseArtDmxPacket, parseSacnPacket } = require('../server/lighting');
+
+test('Malformed packets are rejected safely', () => {
+  const artnet = parseArtDmxPacket(Buffer.from('bad-artnet'), { source: '127.0.0.1' });
+  const sacn = parseSacnPacket(Buffer.from('bad-sacn'), { source: '127.0.0.1' });
+
+  assert.equal(artnet.ok, false);
+  assert.equal(sacn.ok, false);
+});

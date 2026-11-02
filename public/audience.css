@@ -1,108 +1,63 @@
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
-  background: radial-gradient(circle at center, #182335, #090d14 68%);
-  color: #edf6ff;
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0f172a" />
+    <title>Neighbourhood Glow</title>
+    <link rel="manifest" href="/manifest.webmanifest" />
+    <link rel="stylesheet" href="/audience.css" />
+  </head>
+  <body class="audience-page">
+    <main class="audience-shell" aria-live="polite">
+      <div id="disconnectedOverlay" class="connection-overlay hidden" role="alert">
+        <div>
+          <strong>Disconnected</strong>
+          <p>Reconnect in progress. Please wait while the display reconnects to Neighbourhood Glow.</p>
+        </div>
+      </div>
 
-.audience-page {
-  display: grid;
-  place-items: center;
-}
+      <header class="audience-header">
+        <div class="title-wrap">
+          <p class="eyebrow">Neighbourhood Church</p>
+          <h1>Neighbourhood Glow</h1>
+        </div>
+        <div class="status-pill" id="connectionStatus">Connecting…</div>
+      </header>
 
-.audience-shell {
-  width: min(90vw, 960px);
-  text-align: center;
-  padding: 2rem 1rem 3rem;
-}
+      <section class="light-panel" aria-label="Live lighting display">
+        <div id="lightDisplay" class="light-display"></div>
+      </section>
 
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.18rem;
-  color: #9ec8ff;
-  margin-bottom: 0.5rem;
-}
+      <section class="audience-info">
+        <div class="stone-card">
+          <span class="meta-label">Current effect</span>
+          <strong id="effectName">Solid</strong>
+        </div>
+        <div class="stone-card">
+          <span class="meta-label">Brightness</span>
+          <strong id="brightnessValue">100%</strong>
+        </div>
+      </section>
 
-h1, h2 {
-  margin: 0;
-}
+      <section class="announcement-block">
+        <p class="announcement-label">Audience announcement</p>
+        <p id="announcementText">Welcome to Neighbourhood Glow.</p>
+      </section>
 
-.hero-panel {
-  position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 420px;
-  margin: 2rem 0;
-  border-radius: 32px;
-  background: rgba(13, 22, 37, 0.75);
-  overflow: hidden;
-  border: 1px solid rgba(162, 204, 255, 0.2);
-}
+      <div class="video-frame hidden" id="videoFrame">
+        <video id="videoCue" playsinline muted preload="auto" controls="false"></video>
+      </div>
 
-.orb {
-  position: absolute;
-  border-radius: 50%;
-  filter: blur(24px);
-  opacity: 0.9;
-  animation: drift 12s ease-in-out infinite alternate;
-}
+      <footer class="toolbar">
+        <button id="fullscreenButton" type="button" class="action-button">Full screen</button>
+        <label class="toggle-row" for="reducedBrightnessToggle">
+          <span>Reduced brightness</span>
+          <input id="reducedBrightnessToggle" type="checkbox" />
+        </label>
+      </footer>
+    </main>
 
-.orb-one {
-  width: 260px;
-  height: 260px;
-  background: rgba(67, 204, 255, 0.55);
-  left: 18%;
-}
-
-.orb-two {
-  width: 320px;
-  height: 320px;
-  background: rgba(212, 122, 255, 0.48);
-  right: 16%;
-  animation-delay: 1.5s;
-}
-
-.orb-three {
-  width: 220px;
-  height: 220px;
-  background: rgba(82, 255, 180, 0.5);
-  bottom: 12%;
-  animation-delay: 3s;
-}
-
-.cta-row {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.scene-button {
-  border: none;
-  padding: 0.9rem 1.4rem;
-  border-radius: 999px;
-  background: linear-gradient(135deg, #60c9ff, #6a79ff);
-  color: white;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-.status-block {
-  margin-top: 1.5rem;
-}
-
-.status-label {
-  color: #9db9d9;
-  margin-bottom: 0.5rem;
-}
-
-@keyframes drift {
-  from {
-    transform: translate(-18px, -12px) scale(0.98);
-  }
-  to {
-    transform: translate(18px, 12px) scale(1.12);
-  }
-}
+    <script src="/audience.js"></script>
+  </body>
+</html>

@@ -1,22 +1,176 @@
-{
-  "name": "Neighbourhood Glow",
-  "short_name": "Glow",
-  "start_url": "/",
-  "display": "standalone",
-  "background_color": "#0b1120",
-  "theme_color": "#60c9ff",
-  "icons": [
-    {
-      "src": "/icons/icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/maskable.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "maskable"
-    }
-  ]
+const loginScreen = document.getElementById('loginScreen');
+const loginForm = document.getElementById('loginForm');
+const adminDashboard = document.getElementById('adminDashboard');
+const loginError = document.getElementById('loginError');
+const logoutButton = document.getElementById('logoutButton');
+const connectionCount = document.getElementById('connectionCount');
+const currentProtocol = document.getElementById('currentProtocol');
+const currentUniverse = document.getElementById('currentUniverse');
+const currentPriority = document.getElementById('currentPriority');
+const currentColourText = document.getElementById('currentColourText');
+const lastErrorText = document.getElementById('lastErrorText');
+const serverConnectionStatus = document.getElementById('serverConnectionStatus');
+const currentColorSwatch = document.getElementById('currentColorSwatch');
+const brightnessSlider = document.getElementById('brightnessSlider');
+const effectSelect = document.getElementById('effectSelect');
+const manualColorPicker = document.getElementById('manualColorPicker');
+const announcementInput = document.getElementById('announcementInput');
+const videoCueSelect = document.getElementById('videoCueSelect');
+
+let isAuthenticated = false;
+let state = {};
+
+function setError(message) {
+  loginError.textContent = message || '';
+  loginError.classList.toggle('hidden', !message);
 }
+
+function showAdminDashboard(show) {
+  adminDashboard.classList.toggle('hidden', !show);
+  loginScreen.classList.toggle('hidden', show);
+  logoutButton.classList.toggle('hidden', !show);
+}
+
+async function apiFetch(path, options = {}) {
+  const response = await fetch(path, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...(options.headers || {}),
+    },
+    ...options,
+  });
+
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) {
+    throw new Error(payload.error || `Request failed: ${response.status}`);
+  }
+
+  return payload;
+}
+
+async function login(adminPin) {
+  try {
+    const response = await apiFetch('/api/admin/login', {
+      method: 'POST',
+      body: JSON.stringify({ pin: adminPin }),
+    });
+
+    if (response.success) {
+      isAuthenticated = true;
+      showAdminDashboard(true);
+      setError('');
+      await refreshStatus();
+      return;
+    }
+
+    throw new Error('Invalid PIN.');
+  } catch (error) {
+    setError(error.message || 'Unable to sign in.');
+  }
+}
+
+async function logout() {
+  try {
+    await apiFetch('/api/admin/logout', { method: 'POST' });
+  } catch (error) {
+    console.warn(error);
+  }
+
+  isAuthenticated = false;
+  showAdminDashboard(false);
+}
+
+async function refreshStatus() {
+  if (!isAuthenticated) {
+    return;
+  }
+
+  try {
+    const payload = await apiFetch('/api/admin/status');
+    if (!payload || !payload.state) {
+      return;
+    }
+
+    state = payload.state;
+    connectionCount.textContent = String(state.connectedAudience || 0);
+    currentProtocol.textContent = state.protocol || 'Art-Net';
+    currentUniverse.textContent = String(state.universe || 1);
+    currentPriority.textContent = String(state.sourcePriority ?? 100);
+    currentColourText.textContent = state.color || '#f59e0b';
+    currentColorSwatch.style.background = state.color || '#f59e0b';
+    brightnessSlider.value = String(state.brightness ?? 180);
+    effectSelect.value = String(state.effectCode ?? 1);
+    lastErrorText.textContent = state.lastError || 'None';
+    serverConnectionStatus.textContent = state.connected ? 'Connected' : 'Disconnected';
+
+    if (Array.isArray(state.videos) && state.videos.length > 0) {
+      const options = state.videos.map((video, index) => `<option value="${index}">${video.label || `Cue ${index + 1}`}</option>`).join('');
+      videoCueSelect.innerHTML = options;
+      const selectedValue = state.videoCue >= 128 ? Math.min(state.videoCue - 128, state.videos.length - 1) : 0;
+      videoCueSelect.value = String(selectedValue);
+    }
+  } catch (error) {
+    console.error('Unable to refresh admin status', error);
+    serverConnectionStatus.textContent = 'Disconnected';
+  }
+}
+
+async function applyLightingUpdate(payload) {
+  if (!isAuthenticated) {
+    return;
+  }
+
+  try {
+    await apiFetch('/api/admin/lighting', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    });
+    await refreshStatus();
+  } catch (error) {
+    setError(error.message || 'Unable to update lighting');
+  }
+}
+
+loginForm.addEventListener('submit', async (event) => {
+  event.preventDefault();
+  const pinInput = document.getElementById('adminPin');
+  await login(pinInput.value.trim());
+});
+
+logoutButton.addEventListener('click', logout);
+
+brightnessSlider.addEventListener('input', () => {
+  const brightness = Number(brightnessSlider.value);
+  applyLightingUpdate({ brightness, effect: Number(effectSelect.value) || 1 });
+});
+
+effectSelect.addEventListener('change', () => {
+  applyLightingUpdate({ brightness: Number(brightnessSlider.value), effect: Number(effectSelect.value) || 1 });
+});
+
+document.getElementById('applyManualColor').addEventListener('click', () => {
+  const colour = manualColorPicker.value;
+  applyLightingUpdate({ color: colour, brightness: Number(brightnessSlider.value), effect: Number(effectSelect.value) || 1 });
+});
+
+document.getElementById('blackoutButton').addEventListener('click', () => {
+  applyLightingUpdate({ blackout: true, brightness: 0, effect: 0 });
+});
+
+videoCueSelect.addEventListener('change', () => {
+  const cueIndex = Number(videoCueSelect.value || 0);
+  applyLightingUpdate({ videoCue: 128 + cueIndex });
+});
+
+document.getElementById('broadcastAnnouncement').addEventListener('click', () => {
+  const message = announcementInput.value.trim();
+  if (!message) {
+    return;
+  }
+
+  applyLightingUpdate({ announcement: message });
+  announcementInput.value = '';
+});
+
+showAdminDashboard(false);
+setInterval(refreshStatus, 3000);

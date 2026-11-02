@@ -1,65 +1,106 @@
-body {
-  margin: 0;
-  min-height: 100vh;
-  font-family: Arial, Helvetica, sans-serif;
-  background: #0c1220;
-  color: #f2f7ff;
-}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin | Neighbourhood Glow</title>
+    <link rel="stylesheet" href="/admin.css" />
+  </head>
+  <body class="admin-page">
+    <main class="admin-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Administration</p>
+          <h1>Neighbourhood Glow</h1>
+        </div>
+        <button id="logoutButton" class="secondary-button hidden" type="button">Log out</button>
+      </header>
 
-.admin-page {
-  display: grid;
-  place-items: center;
-}
+      <section id="loginScreen" class="panel login-panel">
+        <h2>Staff login</h2>
+        <form id="loginForm" class="stacked-form">
+          <label for="adminPin">PIN</label>
+          <input id="adminPin" type="password" inputmode="numeric" autocomplete="off" maxlength="8" placeholder="Enter administrator PIN" required />
+          <button type="submit" class="primary-button">Access dashboard</button>
+        </form>
+        <p id="loginError" class="error-text hidden" role="alert"></p>
+      </section>
 
-.admin-shell {
-  width: min(90vw, 720px);
-  padding: 2rem 1rem 3rem;
-}
+      <section id="adminDashboard" class="hidden dashboard-shell">
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="meta-label">Audience devices</span>
+            <strong id="connectionCount">0</strong>
+          </article>
+          <article class="stat-card">
+            <span class="meta-label">Protocol</span>
+            <strong id="currentProtocol">Art-Net</strong>
+          </article>
+          <article class="stat-card">
+            <span class="meta-label">Universe</span>
+            <strong id="currentUniverse">1</strong>
+          </article>
+          <article class="stat-card">
+            <span class="meta-label">Source priority</span>
+            <strong id="currentPriority">100</strong>
+          </article>
+        </div>
 
-.eyebrow {
-  text-transform: uppercase;
-  letter-spacing: 0.14rem;
-  color: #88b4ff;
-}
+        <div class="panel-grid">
+          <section class="panel">
+            <h3>Live lighting</h3>
+            <div class="color-preview" id="currentColorSwatch"></div>
 
-.panel,
-.status-panel {
-  background: rgba(17, 30, 48, 0.8);
-  border: 1px solid rgba(143, 178, 255, 0.2);
-  border-radius: 18px;
-  padding: 1.25rem;
-  margin-top: 1rem;
-}
+            <label for="brightnessSlider">Brightness</label>
+            <input id="brightnessSlider" type="range" min="0" max="255" value="180" />
 
-label {
-  display: block;
-  margin-top: 0.8rem;
-  margin-bottom: 0.4rem;
-}
+            <label for="effectSelect">Effect</label>
+            <select id="effectSelect">
+              <option value="0">Off</option>
+              <option value="1">Solid</option>
+              <option value="2">Slow pulse</option>
+              <option value="3">Gentle fade</option>
+            </select>
 
-select,
-input,
-button {
-  width: 100%;
-  box-sizing: border-box;
-  border-radius: 12px;
-  border: 1px solid rgba(167, 198, 255, 0.2);
-  padding: 0.8rem 0.9rem;
-  font-size: 1rem;
-}
+            <label for="manualColorPicker">Manual colour override</label>
+            <input id="manualColorPicker" type="color" value="#ff9f43" />
 
-button {
-  margin-top: 1rem;
-  cursor: pointer;
-  background: linear-gradient(135deg, #63d7ff, #8c7bff);
-  color: white;
-  border: none;
-  font-weight: 700;
-}
+            <div class="button-row">
+              <button id="applyManualColor" type="button" class="primary-button">Apply colour</button>
+              <button id="blackoutButton" type="button" class="warning-button">Blackout</button>
+            </div>
+          </section>
 
-pre {
-  margin: 0;
-  white-space: pre-wrap;
-  word-break: break-word;
-  color: #b7d2ff;
-}
+          <section class="panel">
+            <h3>Video cues</h3>
+            <label for="videoCueSelect">Cue selection</label>
+            <select id="videoCueSelect"></select>
+
+            <label for="announcementInput">Audience announcement</label>
+            <textarea id="announcementInput" rows="3" placeholder="Share a message with the audience"></textarea>
+
+            <button id="broadcastAnnouncement" type="button" class="primary-button">Broadcast announcement</button>
+          </section>
+        </div>
+
+        <section class="panel status-panel">
+          <h3>System status</h3>
+          <div class="status-row">
+            <span>Connection</span>
+            <strong id="serverConnectionStatus">Disconnected</strong>
+          </div>
+          <div class="status-row">
+            <span>Current colour</span>
+            <strong id="currentColourText">#f59e0b</strong>
+          </div>
+          <div class="status-row">
+            <span>Last error</span>
+            <strong id="lastErrorText">None</strong>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <script src="/admin.js"></script>
+  </body>
+</html>

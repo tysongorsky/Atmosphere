@@ -1,12 +1,18 @@
 {
   "name": "neighbourhood-glow",
   "version": "1.0.0",
-  "description": "A neighborhood lighting control dashboard for Art-Net and sACN fixtures.",
+  "description": "Neighbourhood Glow is a Node.js PWA and lighting control server for audience lighting experiences.",
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
     "dev": "node --watch server/index.js",
-    "test": "node --test"
+    "test": "node --test",
+    "simulate:artnet": "node scripts/artnet-simulator.js",
+    "simulate:sacn": "node scripts/sacn-simulator.js",
+    "loadtest": "node scripts/ws-load-test.js"
+  },
+  "engines": {
+    "node": ">=20.0.0"
   },
   "dependencies": {
     "express": "^4.19.2",

@@ -1,39 +1,179 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Admin Panel | Neighbourhood Glow</title>
-    <link rel="stylesheet" href="/admin.css" />
-  </head>
-  <body class="admin-page">
-    <main class="admin-shell">
-      <header>
-        <p class="eyebrow">Administration</p>
-        <h1>Neighbourhood Glow</h1>
-      </header>
+const audienceState = {
+  protocol: 'Art-Net',
+  color: '#ff9f43',
+  brightness: 100,
+  effect: 'Solid',
+  announcement: 'Welcome to Neighbourhood Glow.',
+  videoCue: 0,
+  videos: [],
+  connected: false,
+  reducedBrightness: false,
+};
 
-      <section class="panel">
-        <label for="sceneSelect">Scene</label>
-        <select id="sceneSelect">
-          <option value="festival">Festival</option>
-          <option value="sunset">Sunset</option>
-          <option value="pulse">Pulse</option>
-          <option value="emerald">Emerald</option>
-        </select>
+const lightDisplay = document.getElementById('lightDisplay');
+const connectionStatus = document.getElementById('connectionStatus');
+const disconnectedOverlay = document.getElementById('disconnectedOverlay');
+const announcementText = document.getElementById('announcementText');
+const effectName = document.getElementById('effectName');
+const brightnessValue = document.getElementById('brightnessValue');
+const reducedBrightnessToggle = document.getElementById('reducedBrightnessToggle');
+const videoFrame = document.getElementById('videoFrame');
+const videoCue = document.getElementById('videoCue');
+const fullscreenButton = document.getElementById('fullscreenButton');
 
-        <label for="intensity">Intensity</label>
-        <input id="intensity" type="range" min="0" max="255" value="180" />
+const websocketUrl = `${window.location.protocol === 'https:' ? 'wss' : 'ws'}://${window.location.host}`;
+let socket = null;
+let reconnectTimer = null;
+let lastState = null;
 
-        <button id="sendScene">Send lighting scene</button>
-      </section>
+function formatEffectLabel(value) {
+  if (!value) return 'Off';
+  const labels = ['Off', 'Solid', 'Slow pulse', 'Gentle fade'];
+  return labels[value] || 'Solid';
+}
 
-      <section class="status-panel">
-        <p>Server status</p>
-        <pre id="statusOutput">Checking...</pre>
-      </section>
-    </main>
+function applyColor(color, brightnessPercent) {
+  if (!lightDisplay) return;
 
-    <script src="/admin.js"></script>
-  </body>
-</html>
+  const rgb = color.startsWith('#') ? color : '#fbbf24';
+  const base = rgb;
+  const reduced = audienceState.reducedBrightness ? Math.max(0.45, brightnessPercent / 100 * 0.6) : brightnessPercent / 100;
+  const alpha = Math.min(1, reduced);
+  lightDisplay.style.background = `radial-gradient(circle at center, rgba(255,255,255,${0.72 * alpha}) 0%, ${base} ${Math.min(60, 42 + alpha * 18)}%, rgba(0,0,0,0.2) 90%)`;
+  lightDisplay.style.filter = `brightness(${Math.max(0.45, reduced)}) saturate(${1.2})`;
+  document.body.style.background = `radial-gradient(circle at top, ${base}40, transparent 28%), #050b15`;
+}
+
+function applyEffect(effectLabel, brightnessPercent) {
+  const brightness = Math.min(100, Math.max(12, brightnessPercent));
+  if (effectLabel === 'Slow pulse') {
+    const pulse = 0.78 + Math.sin(Date.now() / 900) * 0.2;
+    lightDisplay.style.transform = `scale(${1 + pulse * 0.08})`;
+    lightDisplay.style.filter = `brightness(${(brightness / 100) * pulse}) saturate(1.2)`;
+    return;
+  }
+
+  if (effectLabel === 'Gentle fade') {
+    const fade = 0.7 + Math.sin(Date.now() / 1400) * 0.25;
+    lightDisplay.style.transform = 'scale(1.04)';
+    lightDisplay.style.filter = `brightness(${(brightness / 100) * fade}) saturate(1.2)`;
+    return;
+  }
+
+  lightDisplay.style.transform = 'scale(1)';
+  lightDisplay.style.filter = `brightness(${brightness / 100}) saturate(1.2)`;
+}
+
+function updateAudience(state) {
+  const nextState = state || lastState || {};
+  lastState = nextState;
+
+  audienceState.protocol = nextState.protocol || 'Art-Net';
+  audienceState.color = nextState.color || '#ff9f43';
+  audienceState.brightness = Number(nextState.brightness ?? 100);
+  audienceState.effect = nextState.effect || 'Solid';
+  audienceState.announcement = nextState.announcement || 'Welcome to Neighbourhood Glow.';
+  audienceState.videoCue = Number(nextState.videoCue ?? 0);
+  audienceState.videos = Array.isArray(nextState.videos) ? nextState.videos : [];
+  audienceState.connected = nextState.connected !== false;
+
+  announcementText.textContent = audienceState.announcement;
+  effectName.textContent = audienceState.effect;
+  brightnessValue.textContent = `${Math.round(audienceState.brightness)}%`;
+  applyColor(audienceState.color, audienceState.brightness);
+  applyEffect(audienceState.effect, audienceState.brightness);
+
+  if (audienceState.videoCue >= 128 && audienceState.videos.length > 0) {
+    const cueIndex = Math.max(0, Math.min(audienceState.videos.length - 1, audienceState.videoCue - 128));
+    const selectedVideo = audienceState.videos[cueIndex];
+    if (selectedVideo && selectedVideo.url) {
+      if (videoCue.src !== selectedVideo.url) {
+        videoCue.src = selectedVideo.url;
+      }
+      videoFrame.classList.remove('hidden');
+      videoCue.muted = true;
+      videoCue.play().catch(() => {
+        videoCue.pause();
+      });
+    }
+  } else {
+    videoCue.pause();
+    videoFrame.classList.add('hidden');
+  }
+}
+
+function setConnectionState(connected) {
+  audienceState.connected = connected;
+  connectionStatus.textContent = connected ? 'Connected' : 'Connecting…';
+  connectionStatus.style.background = connected ? 'rgba(34, 197, 94, 0.18)' : 'rgba(251, 191, 36, 0.18)';
+  connectionStatus.style.color = connected ? '#a7f3d0' : '#fde68a';
+  disconnectedOverlay.classList.toggle('hidden', connected);
+}
+
+function connectWebSocket() {
+  if (socket && socket.readyState === WebSocket.OPEN) {
+    return;
+  }
+
+  socket = new WebSocket(websocketUrl);
+  setConnectionState(false);
+
+  socket.addEventListener('open', () => {
+    setConnectionState(true);
+    socket.send(JSON.stringify({ type: 'hello', client: 'audience' }));
+  });
+
+  socket.addEventListener('message', (event) => {
+    try {
+      const message = JSON.parse(event.data);
+      if (message.type === 'state') {
+        updateAudience(message.state);
+      }
+      if (message.type === 'error') {
+        console.warn(message.message || 'WebSocket error');
+      }
+    } catch (error) {
+      console.error('Failed to parse WebSocket message', error);
+    }
+  });
+
+  socket.addEventListener('close', () => {
+    setConnectionState(false);
+    if (reconnectTimer) clearTimeout(reconnectTimer);
+    reconnectTimer = setTimeout(connectWebSocket, 2000);
+  });
+
+  socket.addEventListener('error', () => {
+    setConnectionState(false);
+  });
+}
+
+async function requestFullscreen() {
+  if (!document.fullscreenElement) {
+    try {
+      await document.documentElement.requestFullscreen();
+    } catch (error) {
+      console.warn('Fullscreen is unavailable:', error);
+    }
+  }
+}
+
+reducedBrightnessToggle.addEventListener('change', () => {
+  audienceState.reducedBrightness = reducedBrightnessToggle.checked;
+  if (lastState) {
+    applyColor(lastState.color || '#ff9f43', Number(lastState.brightness ?? 100));
+    applyEffect(lastState.effect || 'Solid', Number(lastState.brightness ?? 100));
+  }
+});
+
+fullscreenButton.addEventListener('click', requestFullscreen);
+
+connectWebSocket();
+
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('/sw.js').catch((error) => {
+      console.warn('Service worker registration failed', error);
+    });
+  });
+}
